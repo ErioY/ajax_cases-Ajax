@@ -1,0 +1,103 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-20 15:17:41
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-20 23:39:47
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    img{
+        width: 200px;
+        height: 150px;
+    }
+    ul{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    </style>
+</head>
+<body>
+    请输入你要查询的店铺:
+    <input type="text" id="queryStr" value="火锅店">
+    <input id="btnQuery" type="button" value="查询"><br/>
+    <hr/>
+    <ul id="shoppingBox">
+    </ul>
+</body>
+</html>
+<script src="js/ajaxTools.js"></script>
+<script>
+//请求方式：get
+//请求地址：getGoods.php
+//请求参数:(前端发给后端的)
+// query: 表示查询的关键字
+//响应回来的数据格式：
+// [
+//     {
+//         id:"01001",
+//         name:"竹园村火锅店",
+//         address:"子午大道",
+//         phone:110,
+//         img:"img/img01.jpg"  
+//     },
+//     {
+//         id:"01001",
+//         name:"竹园村火锅店",
+//         address:"子午大道",
+//         phone:110,
+//         img:"img/img01.jpg"  
+//     },
+//     {
+//         id:"01001",
+//         name:"竹园村火锅店",
+//         address:"子午大道",
+//         phone:110,
+//         img:"img/img01.jpg"  
+//     }
+// ]
+
+
+
+$("#btnQuery").onclick = function(){
+    ajax_xk({
+        url:"getGoods.php",
+        params:"query="+$("#queryStr").value,
+        func:function(str){
+            let objs = JSON.parse(str);
+            let htmlStr ="";
+            objs.forEach(item => {
+                htmlStr += `
+                    <li>
+                        <img src="${item.img}" style="width: 200px;height: 150px;"><br/>
+                        店名:${item.name}<br/>
+                        联系方式:${item.phone}<br/>
+                        地址:${item.address}<br/>
+                    </li> 
+                `;
+            });
+            $("#shoppingBox").innerHTML=htmlStr;
+        }
+    });
+    
+}
+
+
+function $(str){
+	if(str.charAt(0)=="#"){
+		return document.getElementById(str.substring(1));
+	}else if(str.charAt(0)=="."){
+		return document.getElementsByClassName(str.substring(1));
+	}else{
+		return document.getElementsByTagName(str);
+	}
+}	
+</script>

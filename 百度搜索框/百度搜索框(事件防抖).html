@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input id="query" type="text" /> 
+    <ul id="box">
+       
+    </ul>
+</body>
+</html>
+<script src="js/ajaxTools.js"></script>
+<script>
+
+//需要和后端沟通哪些信息：
+//1、请求地址：music.php
+//2、请求参数（前端给后端发送的数据），主要要的是键
+//    key:表示音乐的关键字
+//3、请求方式:get
+//4、后端响应给前端的数据格式（最好有示例解释）
+//  如：
+/*
+{
+    msg:"success",//sucess：表示获取到了数据；fail：失败
+    datas:[
+        "你是我的眼","你是我的心肝","我是你的宝贝"
+    ]
+}
+*/
+
+let myTimer = null;//当前定时器
+// n
+// i
+// s
+// h
+// i 
+
+$("#query").oninput = function() {
+    if(myTimer != null) {
+        window.clearInterval(myTimer);
+    }
+    myTimer = setTimeout(() => {
+        ajax_xk({
+            url: "music.php",
+            params: "key=" + $("#query").value,
+            func: showData
+        }); 
+    }, 200);
+
+}
+
+function showData(data){
+    console.log(data);
+    let obj = JSON.parse(data);
+    if(obj.msg == "success") {
+        let htmlStr = "";
+        obj.datas.forEach(item => {
+            // let str = item.replace(new RegExp($("#query").value,"ig"),"<b>"+$("#query").value+"</b>");
+            let str = item.replace(new RegExp($("#query").value,"ig"),"<mark>"+$("#query").value+"</mark>");
+            htmlStr += `<li>${str}</li>`;
+        });
+        $("#box").innerHTML = htmlStr;
+    }else{ 
+        $("#box").innerHTML = "";
+    }
+}
+
+function $(str){
+	if(str.charAt(0)=="#"){
+		return document.getElementById(str.substring(1));
+	}else if(str.charAt(0)=="."){
+		return document.getElementsByClassName(str.substring(1));
+	}else{
+		return document.getElementsByTagName(str);
+	}
+}	
+
+</script>

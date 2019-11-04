@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册页面</title>
+</head>
+<body>
+    用户名：
+    <input id="username" name="username" type="text" 
+    onblur="checkuser(this)" >*<span></span><br/>
+
+    密码：<input id="userpass" name="pass" type="text">*<br/>
+    重复密码：<input id="checkpass" type="text">*<br/>
+    <input type="button" value="注册" />
+  
+</body>
+</html>
+<script>
+//作为前端人员，如果要跟后端交互，必须沟通四个信息：
+//1、请求的 url
+//2、请求方式
+//3、请求参数：前端给后端传递的数据。
+//4、响应回来的数据格式及其解释。
+    //  1：表示用户名已经存在
+    //  0：表示用户名不存在。
+
+
+function checkuser(obj){
+    let xhr =new XMLHttpRequest();
+
+    //2 设置请求参数
+    xhr.open("get","checkuser02.php?username="+$("#username").value,true);
+
+    //3 设置回调函数
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState==4 && xhr.status==200){
+            //5 接收请求
+             if(xhr.responseText=="1"){
+                obj.nextElementSibling.innerHTML ="用户名已存在";
+            }else{
+                obj.nextElementSibling.innerHTML ="用户名可以使用";
+            }
+        }
+    }
+    //4 发送请求
+    xhr.send();
+
+}
+
+
+
+function check(){
+    //非空判断：
+    if($("#username").value=="" || $("#userpass").value=="" || $("#checkpass").value==""){
+        alert("亲，请把带星号的都输入了");
+        return false;//阻止浏览器的默认行为
+    }
+    //判断用户名是否符合规则
+
+    //判断密码和重复密码是否一致。
+
+}
+
+function $(str){
+	if(str.charAt(0)=="#"){
+		return document.getElementById(str.substring(1));
+	}else if(str.charAt(0)=="."){
+		return document.getElementsByClassName(str.substring(1));
+	}else{
+		return document.getElementsByTagName(str);
+	}
+}	
+
+</script>

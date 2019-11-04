@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册页面</title>
+</head>
+<body>
+    用户名：
+    <input id="username" name="username" type="text" value="薛燕" >*<span></span><br/>
+    密码：<input id="userpass"  type="password" value="123123">*<br/>
+   <input id="isSave" type="checkbox"  checked="checked" >七天内免登录<br/>
+   <input id="loginBtn" type="button" value="登录" />
+    <div id="msgBox" style="color:red;display: none;"></div>
+  
+</body>
+</html>
+<script src="js/cookieTools.js"></script>
+<script>
+
+//1、请求的 url :loginCheck.php
+//2、请求方式: post;
+//3、请求参数：前端给后端传递的数据。
+// username: 用户名
+// userpass:密码
+
+//4、响应回来的数据格式及其解释。
+    //  1：表示登录成功
+    //  0：表示登录失败。
+
+
+$("#loginBtn").onclick = function(){
+    let xhr =new XMLHttpRequest();
+    //2 设置请求参数
+    xhr.open("post","loginCheck.php",true);
+
+    //3 设置回调函数
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState==4 && xhr.status==200){
+            // //5 接收响应
+            if(xhr.responseText=="1"){
+                //保存cookie
+                if($("#isSave").checked){
+                    addCookie("username",$("#username").value,7);
+                }
+                location.href="index.html";
+            }else{
+               $("#msgBox").innerHTML = "请，用户名或者密码不对！";
+               $("#msgBox").style.display = "block";
+            }
+        }
+    }
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    //4 发送请求
+    let str = `username=${$("#username").value}&userpass=${$("#userpass").value}`;
+    xhr.send(str);
+}
+
+function $(str){
+	if(str.charAt(0)=="#"){
+		return document.getElementById(str.substring(1));
+	}else if(str.charAt(0)=="."){
+		return document.getElementsByClassName(str.substring(1));
+	}else{
+		return document.getElementsByTagName(str);
+	}
+}	
+
+</script>
